@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import ru.javawebinar.graduation.service.UserService;
+import ru.javawebinar.graduation.util.JpaUtil;
 
 import javax.annotation.PostConstruct;
 
@@ -25,15 +26,10 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @SpringJUnitWebConfig(locations = {
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-mvc.xml",
-        "classpath:spring/spring-db.xml"
+        "classpath:spring/spring-db.xml",
 })
 
-//@WebAppConfiguration
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ExtendWith(SpringExtension.class)
-//@ContextConfiguration(classes = { SpringTestConfiguration.class })
 @Transactional
-@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 abstract public class AbstractControllerTest {
 
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
@@ -44,6 +40,12 @@ abstract public class AbstractControllerTest {
     }
 
     protected MockMvc mockMvc;
+
+    @Autowired
+    private CacheManager cacheManager;
+
+    @Autowired
+    private JpaUtil jpaUtil;
 
     @Autowired
     protected UserService userService;
@@ -58,6 +60,12 @@ abstract public class AbstractControllerTest {
                 .addFilter(CHARACTER_ENCODING_FILTER)
                 .apply(springSecurity())
                 .build();
+    }
+
+    @BeforeEach
+    void setUp() {
+        cacheManager.getCache("restaurant").clear();
+        jpaUtil.clear2ndLevelHibernateCache();
     }
 
 }

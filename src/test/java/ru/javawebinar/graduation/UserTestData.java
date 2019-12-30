@@ -14,17 +14,17 @@ import static ru.javawebinar.graduation.TestUtil.readListFromJsonMvcResult;
 
 public class UserTestData {
     public static final int USER_ID = START_SEQ;
-    public static final int ADMIN_ID = START_SEQ + 1;
+    private static final int ADMIN_ID = START_SEQ + 1;
 
-    public static final User USER = new User(USER_ID, "User", "user@mail.ru","password", Role.ROLE_USER);
-    public static final User ADMIN = new User(ADMIN_ID, "Admin", "admin@mail.ru","password", Role.ROLE_ADMIN, Role.ROLE_USER);
+    public static final User USER = new User(USER_ID, "User", "user@mail.ru", "password", Role.ROLE_USER);
+    public static final User ADMIN = new User(ADMIN_ID, "Admin", "admin@mail.ru", "password", Role.ROLE_ADMIN, Role.ROLE_USER);
 
     public static UserTo getCreated() {
         return new UserTo(null, "New", "new@mail.ru", "newpass");
     }
 
     public static UserTo getUpdated() {
-        return new UserTo(null, "New", "new@mail.ru", "newpass");
+        return new UserTo(null, "Updated", "updated@mail.ru", "newpass");
     }
 
     public static UserTo getDuplicated() {
@@ -32,12 +32,8 @@ public class UserTestData {
     }
 
     public static void assertMatch(User actual, User expected) {
-        assertThat(actual).isEqualToIgnoringGivenFields(expected, "votes", "password");
+        assertThat(actual).isEqualToIgnoringGivenFields(expected, "password");
     }
-
-//    public static void assertMatch(UserTo actual, UserTo expected) {
-//        assertThat(actual).isEqualToIgnoringGivenFields(expected, "votes", "password");
-//    }
 
     public static void assertMatch(Iterable<User> actual, User... expected) {
         assertMatch(actual, Arrays.asList(expected));
@@ -50,17 +46,5 @@ public class UserTestData {
     public static ResultMatcher contentJson(User... expected) {
         return result -> assertMatch(readListFromJsonMvcResult(result, User.class), List.of(expected));
     }
-
-//    public static ResultMatcher contentJson(User expected) {
-//        return result -> assertMatch(readFromJsonMvcResult(result, User.class), expected);
-//    }
-
-    public static ResultMatcher getUserMatcher(User... expected) {
-        return result -> assertMatch(readListFromJsonMvcResult(result, User.class), List.of(expected));
-    }
-
-//    public static ResultMatcher getUserMatcher(User expected) {
-//        return result -> assertMatch(readFromJsonMvcResult(result, User.class), expected);
-//    }
 
 }

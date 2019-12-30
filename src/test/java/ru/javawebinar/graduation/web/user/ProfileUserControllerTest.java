@@ -31,14 +31,13 @@ class ProfileUserControllerTest extends AbstractControllerTest {
 
     @Test
     void getUser() throws Exception {
-        ResultActions action = mockMvc.perform(get(REST_URL)
+        mockMvc.perform(get(REST_URL)
                 .with(userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(result -> assertMatch(TestUtil.readFromJsonMvcResult(result, User.class), USER));
 
-        User returned = TestUtil.readFromJson(action, User.class);
-        assertMatch(USER, returned);
     }
 
     @Test
@@ -57,8 +56,7 @@ class ProfileUserControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        assertMatch(userService.getByEmail("new@mail.ru"), UserUtil.updateFromTo(USER, updated));
-
+        assertMatch(userService.getByEmail("updated@mail.ru"), UserUtil.updateFromTo(USER, updated));
     }
 
     @Test
@@ -66,25 +64,23 @@ class ProfileUserControllerTest extends AbstractControllerTest {
         mockMvc.perform(delete(REST_URL)
                 .with(userHttpBasic(USER)))
                 .andDo(print());
-        //.andExpect(status().isNoContent());
         assertMatch(userService.getAll(), ADMIN);
     }
 
     @Test
     void register() throws Exception {
-        UserTo created = getCreated();
+        UserTo createdTo = getCreated();
 
         ResultActions action = mockMvc.perform(post(REST_URL + "register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(created)))
+                .content(JsonUtil.writeValue(createdTo)))
                 .andExpect(status().isCreated());
 
         User returned = readFromJson(action, User.class);
+        User created = UserUtil.createNewFromTo(createdTo);
         created.setId(returned.getId());
 
-
-        //assertMatch(returned, created);
-        assertMatch(userService.getAll(), ADMIN, returned, USER);
+        assertMatch(userService.getByEmail("new@mail.ru"), created);
     }
 
     @Test

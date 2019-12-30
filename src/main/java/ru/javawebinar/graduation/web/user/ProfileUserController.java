@@ -19,7 +19,7 @@ public class ProfileUserController extends AbstractUserController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public User get(@AuthenticationPrincipal AuthorizedUser authorizedUser) {
-        return super.get(authorizedUser.getUserTo().getId());
+        return super.get(authorizedUser.getId());
     }
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -39,7 +39,7 @@ public class ProfileUserController extends AbstractUserController {
         super.update(userTo, authorizedUser.getUserTo().getId());
     }
 
-    @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@AuthenticationPrincipal AuthorizedUser authorizedUser) {
         super.delete(authorizedUser.getUserTo().getId());

@@ -13,6 +13,7 @@ Build a voting system for deciding where to have lunch.
 - If user votes again the same day:
     - If it is before 11:00 we asume that he changed his mind.
     - If it is after 11:00 then it is too late, vote can't be changed
+
 Each restaurant provides new menu each day.
 
 ## Rest API 
@@ -29,6 +30,7 @@ Each restaurant provides new menu each day.
 - POST /rest/admin/users - создать профиль пользователя
 - GET /rest/admin/user - получить свой профиль
 - UPDATE /rest/user - обновить свой профиль
+- DELETE /rest/user - удалить свой профиль
 
 ### Ресторан
 Функциональность администратора:
@@ -59,7 +61,6 @@ Each restaurant provides new menu each day.
 
 Функциональность пользователя:
 - POST /rest/profile/votes - голосовать за ресторан по id
-- GET /rest/profile/votes - получить свой голос за сегодня
 - GET /rest/profile/votes - получить свой голос за сегодня
 - GET /rest/profile/votes/filter?startDate={startDate}&endDate={endDate} -  получить список своих голосов за указанный период
 
@@ -94,6 +95,10 @@ Each restaurant provides new menu each day.
 
 #### update profile
 `curl -s -X PUT -d '{"name":"NewUser2", "email":"user1@mail.ru", "password":"password2"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/rest/profile --user user@mail.ru:password`
+
+#### delete profile
+`curl -s -X DELETE http://localhost:8080/graduation/rest/profile --user user11@mail.ru:password`
+
 
 ## Restaurant with Admin role:
 

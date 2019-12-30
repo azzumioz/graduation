@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.javawebinar.graduation.util.ValidationUtil.getRootCause;
@@ -15,6 +16,7 @@ import static ru.javawebinar.graduation.util.ValidationUtil.getRootCause;
 })
 
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+@Transactional
 @ExtendWith(TimingExtension.class)
 
 abstract class AbstractServiceTest {

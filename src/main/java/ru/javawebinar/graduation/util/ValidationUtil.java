@@ -9,7 +9,7 @@ import java.time.LocalTime;
 
 public class ValidationUtil {
 
-    private static final LocalTime DEADLINE_TIME = LocalTime.of(11, 00);
+    private static final LocalTime DEADLINE_TIME = LocalTime.of(23, 59);
 
     private ValidationUtil() {
     }
