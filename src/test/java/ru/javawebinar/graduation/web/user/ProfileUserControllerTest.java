@@ -56,7 +56,7 @@ class ProfileUserControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        assertMatch(userService.getByEmail("updated@mail.ru"), UserUtil.updateFromTo(USER, updated));
+        assertMatch(userService.getByEmail("updated@mail.ru"), UserUtil.updateFromTo(new User(USER), updated));
     }
 
     @Test
@@ -64,7 +64,7 @@ class ProfileUserControllerTest extends AbstractControllerTest {
         mockMvc.perform(delete(REST_URL)
                 .with(userHttpBasic(USER)))
                 .andDo(print());
-        assertMatch(userService.getAll(), ADMIN);
+        assertMatch(userService.getAll(), ADMIN, USER2);
     }
 
     @Test

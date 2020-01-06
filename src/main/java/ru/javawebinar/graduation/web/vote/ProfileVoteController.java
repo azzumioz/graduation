@@ -23,15 +23,15 @@ import static ru.javawebinar.graduation.web.SecurityUtil.authUserId;
 @RestController
 @RequestMapping(value = ProfileVoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfileVoteController {
-    static final String REST_URL = "/rest/profile/votes";
+    static final String REST_URL = "/rest/votes";
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private VoteService service;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<VoteTo> save(@Valid @RequestBody VoteTo voteTo) {
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<VoteTo> create(@Valid @RequestBody VoteTo voteTo) {
         log.info("save Vote for user {}", authUserId());
 
         VoteTo created = service.save(authUserId(), LocalDateTime.now(), voteTo);
@@ -43,6 +43,15 @@ public class ProfileVoteController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<VoteTo> update(@Valid @RequestBody VoteTo voteTo, @PathVariable("id") int id) {
+        log.info("update Vote {} for user {}", id, authUserId());
+        voteTo.setId(id);
+        VoteTo updated = service.save(authUserId(), LocalDateTime.now(), voteTo);
+
+        return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public List<VoteTo> getBetweenWithUser(@RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
@@ -52,10 +61,9 @@ public class ProfileVoteController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<VoteTo> getToday() {
+    public VoteTo getToday() {
         log.info("get today Vote for user {}", authUserId());
-        return service.getBetweenDatesWithUser(authUserId(), LocalDate.now(), LocalDate.now());
+        return service.getVote(authUserId(), LocalDateTime.now());
     }
 
 }

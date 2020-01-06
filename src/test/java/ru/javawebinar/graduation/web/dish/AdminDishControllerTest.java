@@ -31,7 +31,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
 
     @Test
     void getAllByRest() throws Exception {
-        mockMvc.perform(get(REST_URL + "restaurants/" + RESTAURANT1_ID)
+        mockMvc.perform(get(REST_URL + RESTAURANT1_ID + "/dishes")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -41,7 +41,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
 
     @Test
     void testget() throws Exception {
-        mockMvc.perform(get(REST_URL + DISH1_ID)
+        mockMvc.perform(get(REST_URL + "dishes/" + DISH1_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -51,13 +51,13 @@ class AdminDishControllerTest extends AbstractControllerTest {
 
     @Test
     void getUnauth() throws Exception {
-        mockMvc.perform(get(REST_URL + DISH1_ID))
+        mockMvc.perform(get(REST_URL + "dishes/" + DISH1_ID))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     void testdelete() throws Exception {
-        mockMvc.perform(delete(REST_URL + DISH1_ID)
+        mockMvc.perform(delete(REST_URL + "dishes/" + DISH1_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent());
         assertMatch(dishService.getAll(RESTAURANT1_ID), DISH2, DISH3);
@@ -66,7 +66,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         Dish updated = DishTestData.getUpdated();
-        mockMvc.perform(put(REST_URL + "/restaurants/" + RESTAURANT1_ID + "/dishes/" + DISH1_ID)
+        mockMvc.perform(put(REST_URL + RESTAURANT1_ID + "/dishes/" + DISH1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated))
                 .with(userHttpBasic(ADMIN)))
@@ -76,7 +76,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
     @Test
     void save() throws Exception {
         Dish created = DishTestData.getCreated();
-        ResultActions action = mockMvc.perform(post(REST_URL + "restaurants/" + RESTAURANT1_ID)
+        ResultActions action = mockMvc.perform(post(REST_URL + RESTAURANT1_ID + "/dishes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(created))
                 .with(userHttpBasic(ADMIN)));

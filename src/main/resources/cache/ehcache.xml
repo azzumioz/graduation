@@ -19,5 +19,5 @@
         <heap>1</heap>
     </cache-template>
 
-    <cache alias="restaurant" uses-template="singleNonExpiryCache"/>
+    <cache alias="restaurants" uses-template="singleNonExpiryCache"/>
 </config>

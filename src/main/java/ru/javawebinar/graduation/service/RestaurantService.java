@@ -1,24 +1,59 @@
 package ru.javawebinar.graduation.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.graduation.model.Restaurant;
+import ru.javawebinar.graduation.repository.RestaurantRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface RestaurantService {
+import static ru.javawebinar.graduation.util.ValidationUtil.checkNotFoundWithId;
 
-    List<Restaurant> getAll(LocalDate date);
+@Service("restaurantService")
+public class RestaurantService {
 
-    List<Restaurant> getAllForId(LocalDate date, int id);
+    @Autowired
+    private RestaurantRepository restaurantRepository;
 
-    List<Restaurant> getAllWithoutDish();
+    @Cacheable("restaurants")
+    public List<Restaurant> getAll(LocalDate date) {
+        return restaurantRepository.findAllWithDish(date);
+    }
 
-    Restaurant get(int id);
+    public List<Restaurant> getAllForId(LocalDate date, int id) {
+        return checkNotFoundWithId(restaurantRepository.findAllWithDishForId(date, id), id);
+    }
 
-    void delete(int id);
+    public List<Restaurant> getAllWithoutDish() {
+        return restaurantRepository.findAll();
+    }
 
-    Restaurant create(Restaurant restaurant);
+    public Restaurant get(int id) {
+        return restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant not found by id " + id));
+    }
 
-    Restaurant update(Restaurant restaurant);
+    @Transactional
+    @CacheEvict(value = "restaurants", allEntries = true)
+    public void delete(int id) {
+        restaurantRepository.deleteById(id);
+    }
+
+    @Transactional
+    @CacheEvict(value = "restaurants", allEntries = true)
+    public Restaurant create(Restaurant restaurant) {
+        return restaurantRepository.save(restaurant);
+    }
+
+    @Transactional
+    @CacheEvict(value = "restaurants", allEntries = true)
+    public Restaurant update(Restaurant restaurant) {
+        restaurantRepository.findById(restaurant.getId()).orElseThrow(() -> new EntityNotFoundException("Restaurant not found by id " + restaurant.getId()));
+        return checkNotFoundWithId(restaurantRepository.save(restaurant), restaurant.getId());
+    }
 
 }

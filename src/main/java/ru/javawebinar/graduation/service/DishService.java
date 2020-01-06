@@ -1,20 +1,61 @@
 package ru.javawebinar.graduation.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import ru.javawebinar.graduation.model.Dish;
-import ru.javawebinar.graduation.util.exception.NotFoundException;
+import ru.javawebinar.graduation.model.Restaurant;
+import ru.javawebinar.graduation.repository.DishRepository;
+import ru.javawebinar.graduation.repository.RestaurantRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-public interface DishService {
+import static ru.javawebinar.graduation.util.ValidationUtil.checkNotFoundWithId;
 
-    Dish create(Dish dish, int restaurantId);
+@Service("dishService")
+public class DishService {
 
-    void delete(int id) throws NotFoundException;
+    @Autowired
+    private DishRepository dishRepository;
 
-    Dish get(int id) throws NotFoundException;
+    @Autowired
+    private RestaurantRepository restaurantRepository;
 
-    Dish update(Dish dish, int restaurantId);
+    @CacheEvict(value = "restaurants", allEntries = true)
+    public Dish create(Dish dish, int restaurantId) {
+        Assert.notNull(dish, "dish must not be null");
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new IllegalArgumentException("Restaurant not found by id " + restaurantId));
+        dish.setRestaurant(restaurant);
+        if (dish.getDate() == null) {
+            dish.setDate(LocalDateTime.now());
+        }
+        return dishRepository.save(dish);
+    }
 
-    List<Dish> getAll(int restId);
+    @CacheEvict(value = "restaurants", allEntries = true)
+    public void delete(int id) {
+        dishRepository.deleteById(id);
+    }
+
+    public Dish get(int id) {
+        return dishRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Dish not found by id " + id));
+    }
+
+    @Transactional
+    @CacheEvict(value = "restaurants", allEntries = true)
+    public Dish update(Dish dish, int restaurantId) {
+        Assert.notNull(dish, "dish must not be null");
+        dish.setRestaurant(restaurantRepository.getOne(restaurantId));
+        checkNotFoundWithId(dishRepository.save(dish), dish.getId());
+        return dish;
+
+    }
+
+    public List<Dish> getAll(int restId) {
+        return dishRepository.getAll(restId).orElseThrow(() -> new IllegalArgumentException("not found dishes with restaurant id " + restId));
+    }
 
 }

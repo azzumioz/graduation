@@ -19,7 +19,6 @@ public class AbstractRestaurantController {
     @Autowired
     private RestaurantService service;
 
-
     public List<Restaurant> getAll(LocalDate date) {
         log.info("get all restaurants");
         return service.getAll(date);

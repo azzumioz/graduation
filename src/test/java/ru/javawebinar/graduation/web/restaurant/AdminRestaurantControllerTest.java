@@ -11,6 +11,7 @@ import ru.javawebinar.graduation.service.RestaurantService;
 import ru.javawebinar.graduation.web.AbstractControllerTest;
 import ru.javawebinar.graduation.web.json.JsonUtil;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -88,4 +89,5 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
         assertMatch(restaurantService.getAllWithoutDish(), Arrays.asList(RESTAURANT1, RESTAURANT2, RESTAURANT3, created));
     }
+
 }

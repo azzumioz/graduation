@@ -15,9 +15,11 @@ import static ru.javawebinar.graduation.TestUtil.readListFromJsonMvcResult;
 public class UserTestData {
     public static final int USER_ID = START_SEQ;
     private static final int ADMIN_ID = START_SEQ + 1;
+    private static final int USER2_ID = START_SEQ + 2;
 
     public static final User USER = new User(USER_ID, "User", "user@mail.ru", "password", Role.ROLE_USER);
     public static final User ADMIN = new User(ADMIN_ID, "Admin", "admin@mail.ru", "password", Role.ROLE_ADMIN, Role.ROLE_USER);
+    public static final User USER2 = new User(USER2_ID, "User2", "user2@mail.ru", "password", Role.ROLE_USER);
 
     public static UserTo getCreated() {
         return new UserTo(null, "New", "new@mail.ru", "newpass");

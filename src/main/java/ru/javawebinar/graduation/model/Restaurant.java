@@ -1,12 +1,8 @@
 package ru.javawebinar.graduation.model;
 
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cache;
-
 import javax.persistence.*;
 import java.util.List;
 
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @NamedEntityGraph(name = Restaurant.GRAPH_WITH_DISHES, attributeNodes =
         {
@@ -17,7 +13,6 @@ public class Restaurant extends AbstractNamedEntity {
 
     public static final String GRAPH_WITH_DISHES = "Restaurant.withDishes";
 
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     private List<Dish> dishes;
 

@@ -4,23 +4,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.javawebinar.graduation.TestUtil;
 import ru.javawebinar.graduation.model.Role;
 import ru.javawebinar.graduation.model.User;
-import ru.javawebinar.graduation.UserTestData;
 import ru.javawebinar.graduation.service.UserService;
 import ru.javawebinar.graduation.web.AbstractControllerTest;
 import ru.javawebinar.graduation.web.json.JsonUtil;
 
-import java.util.Arrays;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -40,7 +33,7 @@ class AdminUserControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-              .andExpect(contentJson(ADMIN, USER));
+                .andExpect(contentJson(ADMIN, USER, USER2));
     }
 
     @Test
@@ -71,16 +64,16 @@ class AdminUserControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void testDelete() throws Exception{
+    void testDelete() throws Exception {
         mockMvc.perform(delete(REST_URL + USER_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        assertMatch(userService.getAll(), ADMIN);
+        assertMatch(userService.getAll(), ADMIN, USER2);
     }
 
     @Test
-    void createUser() throws Exception{
+    void createUser() throws Exception {
         User expected = new User(null, "New", "new@mail.ru", "newPass", Role.ROLE_USER);
         ResultActions action = mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -92,7 +85,7 @@ class AdminUserControllerTest extends AbstractControllerTest {
         expected.setId(returned.getId());
 
         assertMatch(returned, expected);
-        assertMatch(userService.getAll(), ADMIN, expected, USER);
+        assertMatch(userService.getAll(), ADMIN, expected, USER, USER2);
     }
 
     @Test

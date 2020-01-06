@@ -13,6 +13,7 @@ import ru.javawebinar.graduation.model.User;
 import ru.javawebinar.graduation.repository.UserRepository;
 import ru.javawebinar.graduation.to.UserTo;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static ru.javawebinar.graduation.util.UserUtil.prepareToSave;
@@ -44,7 +45,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User get(int id) {
-        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
+        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found by id  " + id));
     }
 
     @Override
@@ -77,7 +78,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("User " + email + " is not found");
         }
-
         return new AuthorizedUser(user);
     }
 

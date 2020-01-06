@@ -36,7 +36,7 @@ class ProfileRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void getAllByIdAndByDate() throws Exception{
-        mockMvc.perform(get(REST_URL + "100002?date=2019-11-23")
+        mockMvc.perform(get(REST_URL + RESTAURANT1_ID  + "?date=2019-11-23")
                 .with(userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 .andDo(print())
