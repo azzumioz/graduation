@@ -4,8 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ru.javawebinar.graduation.TestUtil;
 import ru.javawebinar.graduation.model.Role;
 import ru.javawebinar.graduation.model.User;
 import ru.javawebinar.graduation.service.UserService;
@@ -49,6 +50,14 @@ class AdminUserControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + 1)
+                .with(TestUtil.userHttpBasic(ADMIN)))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detail").value("User not found by id 1"));
+    }
+
+    @Test
     void getUnauth() throws Exception {
         mockMvc.perform(get(REST_URL))
                 .andExpect(status().isUnauthorized());
@@ -89,14 +98,13 @@ class AdminUserControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @Transactional(propagation = Propagation.NEVER)
     void createDuplicate() throws Exception {
-        User expected = new User(null, "User2", "user@mail.ru", "newPass", Role.ROLE_USER, Role.ROLE_ADMIN);
+        User created = USER;
         mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
-                .content(JsonUtil.writeValue(expected)))
-                .andExpect(status().isConflict());
+                .content(JsonUtil.writeValue(created)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detail").value(created + " must be new (id=null)"));
     }
 
 }

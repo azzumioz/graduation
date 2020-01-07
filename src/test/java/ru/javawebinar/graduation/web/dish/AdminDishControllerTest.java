@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ru.javawebinar.graduation.DishTestData;
 import ru.javawebinar.graduation.TestUtil;
 import ru.javawebinar.graduation.model.Dish;
@@ -50,6 +52,14 @@ class AdminDishControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "dishes/" + 1)
+                .with(TestUtil.userHttpBasic(ADMIN)))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detail").value("Dish not found by id 1"));
+    }
+
+    @Test
     void getUnauth() throws Exception {
         mockMvc.perform(get(REST_URL + "dishes/" + DISH1_ID))
                 .andExpect(status().isUnauthorized());
@@ -86,5 +96,16 @@ class AdminDishControllerTest extends AbstractControllerTest {
         created.setId(returned.getId());
 
         assertMatch(dishService.getAll(RESTAURANT1_ID), DISH1, DISH2, DISH3, created);
+    }
+
+    @Test
+    void saveDuplicate() throws Exception {
+        Dish created = DISH1;
+
+        mockMvc.perform(post(REST_URL + RESTAURANT1_ID + "/dishes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(created))
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detail").value(created + " must be new (id=null)"));
     }
 }

@@ -9,7 +9,7 @@ import java.time.LocalTime;
 
 public class ValidationUtil {
 
-    private static final LocalTime DEADLINE_TIME = LocalTime.of(11, 00);
+    private static LocalTime DEADLINE_TIME = LocalTime.of(11, 00);
 
     private ValidationUtil() {
     }
@@ -67,6 +67,14 @@ public class ValidationUtil {
         if (time.isAfter(DEADLINE_TIME)) {
             throw new VoteTimeViolationException("It's too late to delete vote");
         }
+    }
+
+    public static LocalTime getDeadLineTime() {
+        return DEADLINE_TIME;
+    }
+
+    public static void setDeadLineTime(LocalTime time) {
+        DEADLINE_TIME = time;
     }
 
 }

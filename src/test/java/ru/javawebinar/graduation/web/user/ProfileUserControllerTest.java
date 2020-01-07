@@ -60,7 +60,7 @@ class ProfileUserControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void testdelete() throws Exception {
+    void testDelete() throws Exception {
         mockMvc.perform(delete(REST_URL)
                 .with(userHttpBasic(USER)))
                 .andDo(print());

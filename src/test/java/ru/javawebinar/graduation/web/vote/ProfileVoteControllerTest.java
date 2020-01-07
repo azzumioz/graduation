@@ -1,22 +1,21 @@
 package ru.javawebinar.graduation.web.vote;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ru.javawebinar.graduation.TestUtil;
 import ru.javawebinar.graduation.VoteTestData;
 import ru.javawebinar.graduation.service.VoteService;
 import ru.javawebinar.graduation.to.VoteTo;
 import ru.javawebinar.graduation.util.ValidationUtil;
-import ru.javawebinar.graduation.util.exception.VoteTimeViolationException;
 import ru.javawebinar.graduation.web.AbstractControllerTest;
 import ru.javawebinar.graduation.web.json.JsonUtil;
 
 import java.time.LocalTime;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -39,7 +38,7 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(created))
                 .with(userHttpBasic(USER)))
                 .andDo(print())
-                .andExpect(status().isInternalServerError());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detail").value("Have you already voted today"));
     }
 
     @Test
@@ -58,9 +57,9 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @EnabledIf(value = "new Date().getHours()<11")
     void update() throws Exception {
         VoteTo updated = VoteTestData.getUpdated();
+        ValidationUtil.setDeadLineTime(LocalTime.now().plusMinutes(1));
         mockMvc.perform(put(REST_URL + VOTE5)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated))
@@ -73,12 +72,15 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @EnabledIf(value = "new Date().getHours()>11")
-    void updateAfter() {
-        Throwable exception = assertThrows(VoteTimeViolationException.class, () -> {
-            ValidationUtil.checkTimeForOperations(LocalTime.of(12, 00));
-        });
-        assertTrue(exception.getMessage().contains("It's too late to delete vote"));
+    void updateAfter() throws Exception {
+        VoteTo updated = VoteTestData.getUpdated();
+        ValidationUtil.setDeadLineTime(LocalTime.now().minusMinutes(1));
+        mockMvc.perform(put(REST_URL + VOTE5)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated))
+                .with(userHttpBasic(USER)))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detail").value("It's too late to delete vote"));
     }
 
     @Test
@@ -101,6 +103,12 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(contentJson(VOTE1_TO, VOTE3_TO));
+    }
+
+    @Test
+    void getUnauth() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL))
+                .andExpect(status().isUnauthorized());
     }
 
 }
