@@ -41,7 +41,7 @@ CREATE TABLE dish
   restaurant_id   INTEGER      NOT NULL,
   FOREIGN KEY (restaurant_id) REFERENCES restaurant (id) ON DELETE CASCADE
 );
-CREATE UNIQUE INDEX dish_unique_restaurantId_name_idx ON dish (restaurant_id, name);
+CREATE UNIQUE INDEX dish_unique_restaurantId_date_name_idx ON dish (restaurant_id, date, name);
 
 CREATE TABLE vote
 (
