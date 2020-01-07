@@ -42,7 +42,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void testget() throws Exception {
+    void testGet() throws Exception {
         mockMvc.perform(get(REST_URL + "dishes/" + DISH1_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
@@ -66,7 +66,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void testdelete() throws Exception {
+    void testDelete() throws Exception {
         mockMvc.perform(delete(REST_URL + "dishes/" + DISH1_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent());

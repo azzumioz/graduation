@@ -40,7 +40,7 @@ public class RestaurantService {
     @Transactional
     @CacheEvict(value = "restaurants", allEntries = true)
     public void delete(int id) {
-        restaurantRepository.deleteById(id);
+        checkNotFoundWithId (restaurantRepository.delete(id) != 0, id);
     }
 
     @Transactional

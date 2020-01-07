@@ -110,8 +110,8 @@ Each restaurant provides new menu each day.
 #### create Restaurant
 `curl -s -X POST -d '{"name":"New Restaurant"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/rest/admin/restaurants --user admin@mail.ru:password`
 
-#### update Restaurant
-`curl -s -X PUT -d '{"name":"Restaurant2_update"}' -H 'Content-Type: application/json' http://localhost:8080/graduation/rest/admin/restaurants/100003 --user admin@mail.ru:password`
+#### update Restaurant 100004
+`curl -s -X PUT -d '{"name":"Restaurant2_update"}' -H 'Content-Type: application/json' http://localhost:8080/graduation/rest/admin/restaurants/100004 --user admin@mail.ru:password`
 
 #### delete Restaurant 100015
 `curl -s -X DELETE http://localhost:8080/graduation/rest/admin/restaurants/100015 --user admin@mail.ru:password`
