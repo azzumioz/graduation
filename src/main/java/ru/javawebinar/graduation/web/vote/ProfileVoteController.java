@@ -33,13 +33,12 @@ public class ProfileVoteController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<VoteTo> create(@Valid @RequestBody VoteTo voteTo) {
         log.info("save Vote for user {}", authUserId());
-
         VoteTo created = service.save(authUserId(), LocalDateTime.now(), voteTo);
-
-        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "/vote")
-                .buildAndExpand(created.getId()).toUri();
-
+        URI uriOfNewResource = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(created.getId())
+                .toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 

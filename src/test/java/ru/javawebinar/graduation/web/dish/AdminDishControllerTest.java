@@ -79,7 +79,8 @@ class AdminDishControllerTest extends AbstractControllerTest {
         ResultActions action = mockMvc.perform(post(REST_URL + RESTAURANT1_ID + "/dishes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(created))
-                .with(userHttpBasic(ADMIN)));
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isCreated());
 
         Dish returned = TestUtil.readFromJson(action, Dish.class);
         created.setId(returned.getId());

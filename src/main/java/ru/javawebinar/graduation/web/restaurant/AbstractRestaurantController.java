@@ -52,7 +52,7 @@ public class AbstractRestaurantController {
 
     public Restaurant create(Restaurant restaurant) {
         checkNew(restaurant);
-        log.info("create restaurant {}", restaurant.getId());
+        log.info("create restaurant");
         return service.create(restaurant);
     }
 

@@ -2,9 +2,12 @@ package ru.javawebinar.graduation.web.restaurant;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.graduation.model.Restaurant;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -35,10 +38,15 @@ public class AdminRestaurantController extends AbstractRestaurantController {
         return super.update(restaurant, id);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public Restaurant create(@RequestBody Restaurant restaurant) {
-        return super.create(restaurant);
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Restaurant> createRest(@RequestBody Restaurant restaurant) {
+        Restaurant created = super.create(restaurant);
+        URI uriOfNewResource = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(created.getId())
+                .toUri();
+        return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
 }
