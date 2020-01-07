@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.graduation.model.Vote;
 import ru.javawebinar.graduation.repository.RestaurantRepository;
+import ru.javawebinar.graduation.repository.UserRepository;
 import ru.javawebinar.graduation.repository.VoteRepository;
 import ru.javawebinar.graduation.to.VoteTo;
 import ru.javawebinar.graduation.util.ValidationUtil;
@@ -28,6 +29,9 @@ public class VoteService {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public VoteTo getVote(int userId, LocalDateTime dateTime) {
         return VoteUtil.asTo(voteRepository.getMyVote(dateTime.with(LocalTime.MIN), dateTime.with(LocalTime.MAX), userId));
@@ -57,6 +61,7 @@ public class VoteService {
         }
         if (voteTo.isNew() && vote == null) {
             vote = new Vote();
+            vote.setUser(userRepository.getOne(userId));
         }
 
         vote.setRestaurant(restaurantRepository.getOne(voteTo.getRestaurantId()));
