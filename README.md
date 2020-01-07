@@ -23,8 +23,8 @@ Each restaurant provides new menu each day.
 - GET /rest/admin/users/{userId} - получить профиль пользователя по id
 - GET /rest/admin/users/by?email={email} - получить профиль пользователя по email
 - POST /rest/admin/users - создать профиль пользователя
-- PUT /rest/users/{userId} - обновить профиль пользователя по id
-- DELETE /rest/users/{userId} - удалить профиль пользователя по id
+- PUT /rest/admin/{userId} - обновить профиль пользователя по id
+- DELETE /rest/admin/{userId} - удалить профиль пользователя по id
 
 Функциональность пользователя:
 - GET /rest/profile - получить свой профиль
