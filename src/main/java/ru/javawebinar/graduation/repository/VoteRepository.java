@@ -22,7 +22,7 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     List<Vote> findByUserIdOrderByDateTimeDesc(int userId);
 
     @Query("SELECT v FROM Vote v WHERE v.dateTime BETWEEN :startDate AND :endDate AND v.user.id=:userId")
-    Vote getMyVote(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, @Param("userId") int userId);
+    Vote get(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, @Param("userId") int userId);
 
     @Query("SELECT v from Vote v WHERE v.dateTime BETWEEN :startDate AND :endDate")
     Optional<List<Vote>> getAllBetweenDate(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);

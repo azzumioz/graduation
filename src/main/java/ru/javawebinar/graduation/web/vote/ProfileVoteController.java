@@ -56,7 +56,7 @@ public class ProfileVoteController {
     public List<VoteTo> getBetweenWithUser(@RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                                            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         log.info("Vote getBetween dates({} - {}) for user {}", startDate, endDate, authUserId());
-        return service.getBetweenDatesWithUser(authUserId(), startDate, endDate);
+        return service.getBetweenDatesByUser(authUserId(), startDate, endDate);
     }
 
     @GetMapping

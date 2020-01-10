@@ -65,7 +65,7 @@ public class ValidationUtil {
 
     public static void checkTimeForOperations(LocalTime time) {
         if (time.isAfter(DEADLINE_TIME)) {
-            throw new VoteTimeViolationException("It's too late to delete vote");
+            throw new VoteTimeViolationException("It's too late to change vote");
         }
     }
 
