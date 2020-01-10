@@ -15,7 +15,6 @@ import ru.javawebinar.graduation.to.VoteTo;
 import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static ru.javawebinar.graduation.web.SecurityUtil.authUserId;
@@ -33,7 +32,7 @@ public class ProfileVoteController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<VoteTo> create(@Valid @RequestBody VoteTo voteTo) {
         log.info("save Vote for user {}", authUserId());
-        VoteTo created = service.save(authUserId(), LocalDateTime.now(), voteTo);
+        VoteTo created = service.save(authUserId(), LocalDate.now(), voteTo);
         URI uriOfNewResource = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
@@ -46,7 +45,7 @@ public class ProfileVoteController {
     public ResponseEntity<VoteTo> update(@Valid @RequestBody VoteTo voteTo, @PathVariable("id") int id) {
         log.info("update Vote {} for user {}", id, authUserId());
         voteTo.setId(id);
-        VoteTo updated = service.save(authUserId(), LocalDateTime.now(), voteTo);
+        VoteTo updated = service.save(authUserId(), LocalDate.now(), voteTo);
 
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
@@ -62,7 +61,7 @@ public class ProfileVoteController {
     @GetMapping
     public VoteTo getToday() {
         log.info("get today Vote for user {}", authUserId());
-        return service.getVote(authUserId(), LocalDateTime.now());
+        return service.getVote(authUserId(), LocalDate.now());
     }
 
 }

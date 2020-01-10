@@ -5,7 +5,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "vote")
@@ -23,20 +23,20 @@ public class Vote extends AbstractBaseEntity {
     @NotNull
     private Restaurant restaurant;
 
-    @Column(name = "dateTime", nullable = false)
+    @Column(name = "date", nullable = false)
     @NotNull
-    private LocalDateTime dateTime;
+    private LocalDate date;
 
     public Vote() {
     }
 
-    public Vote(LocalDateTime dateTime, User user, Restaurant restaurant) {
-        this(null, dateTime, user, restaurant);
+    public Vote(LocalDate date, User user, Restaurant restaurant) {
+        this(null, date, user, restaurant);
     }
 
-    public Vote(Integer id, LocalDateTime dateTime, User user, Restaurant restaurant) {
+    public Vote(Integer id, LocalDate date, User user, Restaurant restaurant) {
         super(id);
-        this.dateTime = dateTime;
+        this.date = date;
         this.user = user;
         this.restaurant = restaurant;
     }
@@ -57,19 +57,19 @@ public class Vote extends AbstractBaseEntity {
         this.restaurant = restaurant;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     @Override
     public String toString() {
         return "Vote{" +
                 "id=" + id +
-                ", dateTime=" + dateTime +
+                ", date=" + date +
                 '}';
     }
 }

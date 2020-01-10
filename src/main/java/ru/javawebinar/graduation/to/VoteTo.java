@@ -3,11 +3,11 @@ package ru.javawebinar.graduation.to;
 import ru.javawebinar.graduation.model.Vote;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class VoteTo extends BaseTo {
 
-    private LocalDateTime dateTime;
+    private LocalDate date;
 
     @NotNull
     private Integer restaurantId;
@@ -15,28 +15,28 @@ public class VoteTo extends BaseTo {
     public VoteTo() {
     }
 
-    public VoteTo(LocalDateTime dateTime, Integer restaurantId) {
-        this(null, dateTime, restaurantId);
+    public VoteTo(LocalDate date, Integer restaurantId) {
+        this(null, date, restaurantId);
     }
 
-    public VoteTo(Integer id, LocalDateTime dateTime, Integer restaurantId) {
+    public VoteTo(Integer id, LocalDate date, Integer restaurantId) {
         super(id);
-        this.dateTime = dateTime;
+        this.date = date;
         this.restaurantId = restaurantId;
     }
 
     public VoteTo(Vote vote) {
         super(vote.getId());
-        this.dateTime = (vote.getDateTime());
+        this.date = (vote.getDate());
         this.restaurantId = vote.getRestaurant().getId();
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public Integer getRestaurantId() {
@@ -54,14 +54,14 @@ public class VoteTo extends BaseTo {
 
         VoteTo voteTo = (VoteTo) o;
 
-        if (!dateTime.equals(voteTo.dateTime)) return false;
+        if (!date.equals(voteTo.date)) return false;
         if (!restaurantId.equals(voteTo.restaurantId)) return false;
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = dateTime.hashCode();
+        int result = date.hashCode();
         result = 31 * result + restaurantId.hashCode();
         return result;
     }
@@ -69,7 +69,7 @@ public class VoteTo extends BaseTo {
     @Override
     public String toString() {
         return "VoteTo{" +
-                "dateTime=" + dateTime +
+                "date=" + date +
                 ", restaurantId=" + restaurantId +
                 '}';
     }
