@@ -43,7 +43,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
 
     @Test
     void testGet() throws Exception {
-        mockMvc.perform(get(REST_URL + "dishes/" + DISH1_ID)
+        mockMvc.perform(get(REST_URL + RESTAURANT1_ID + "/dishes/" + DISH1_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -53,7 +53,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
 
     @Test
     void getNotFound() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "dishes/" + 1)
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT1_ID + "/dishes/" + 1)
                 .with(TestUtil.userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.detail").value("Dish not found by id 1"));
@@ -61,13 +61,13 @@ class AdminDishControllerTest extends AbstractControllerTest {
 
     @Test
     void getUnauth() throws Exception {
-        mockMvc.perform(get(REST_URL + "dishes/" + DISH1_ID))
+        mockMvc.perform(get(REST_URL + RESTAURANT1_ID + "/dishes/" + DISH1_ID))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     void testDelete() throws Exception {
-        mockMvc.perform(delete(REST_URL + "dishes/" + DISH1_ID)
+        mockMvc.perform(delete(REST_URL + RESTAURANT1_ID + "/dishes/" + DISH1_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent());
         assertMatch(dishService.getAll(RESTAURANT1_ID), DISH2, DISH3);

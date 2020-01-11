@@ -36,18 +36,18 @@ public class AdminDishController {
         return dishService.getAll(restId);
     }
 
-    @GetMapping(value = "/dishes/{id}")
+    @GetMapping(value = "/{restId}/dishes/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public Dish get(@PathVariable("id") int id) {
-        log.info("get dish by Id {}", id);
-        return dishService.get(id);
+    public Dish get(@PathVariable("restId") int restId, @PathVariable("id") int id) {
+        log.info("get dish by Id {} in restaurant {}", id, restId);
+        return dishService.get(id, restId);
     }
 
-    @DeleteMapping("/dishes/{id}")
+    @DeleteMapping("/{restId}/dishes/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") int id) {
-        log.info("delete dish {}", id);
-        dishService.delete(id);
+    public void delete(@PathVariable("restId") int restId, @PathVariable("id") int id) {
+        log.info("delete dish {} in restaurant {} ", id, restId);
+        dishService.delete(id, restId);
     }
 
     @PutMapping(value = "/{restId}/dishes/{dishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -59,7 +59,7 @@ public class AdminDishController {
     }
 
     @PostMapping(value = "/{restId}/dishes", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public  ResponseEntity<Dish> save(@RequestBody Dish dish, @PathVariable("restId") int restId) {
+    public ResponseEntity<Dish> save(@RequestBody Dish dish, @PathVariable("restId") int restId) {
         checkNew(dish);
         log.info("create dish in restaurant {}", restId);
         Dish created = dishService.create(dish, restId);

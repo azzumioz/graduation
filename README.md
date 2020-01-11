@@ -17,53 +17,53 @@ Build a voting system for deciding where to have lunch.
 Each restaurant provides new menu each day.
 
 ## Rest API 
-### Пользователь
-Функциональность администратора:
-- GET /rest/admin/users - получить список всех пользователей
-- GET /rest/admin/users/{userId} - получить профиль пользователя по id
-- GET /rest/admin/users/by?email={email} - получить профиль пользователя по email
-- POST /rest/admin/users - создать профиль пользователя
-- PUT /rest/admin/{userId} - обновить профиль пользователя по id
-- DELETE /rest/admin/{userId} - удалить профиль пользователя по id
+### User
+Functionality administrator:
+- GET /rest/admin/users - get a list of all users
+- GET /rest/admin/users/{userId} - get user profile by id
+- GET /rest/admin/users/by?email={email} - get user profile by email
+- POST /rest/admin/users - create user profile
+- PUT /rest/admin/{userId} - update user profile by id
+- DELETE /rest/admin/{userId} - delete user profile by id
 
-Функциональность пользователя:
-- GET /rest/profile - получить свой профиль
-- UPDATE /rest/profile - обновить свой профиль
-- DELETE /rest/profile - удалить свой профиль
+Functionality user:
+- GET /rest/profile - get your profile
+- UPDATE /rest/profile - update your profile
+- DELETE /rest/profile - delete your profile
 
-Функциональность анонимного пользователя:
-- POST /rest/profile - зарегистрироваться как новый пользователь
+Functionality anonymous user:
+- POST /rest/profile - register as a new user
 
-### Ресторан
-Функциональность администратора:
-- GET /rest/admin/restaurants - получить список всех ресторанов
-- POST /rest/admin/restaurants - создать профиль ресторана
-- PUT /rest/admin/restaurants/{restaurantId} - обновить профиль ресторана по id
-- DELETE /rest/admin/restaurants/{restaurantId} - удалить профиль ресторана по id
+### Restaurant
+Functionality administrator:
+- GET /rest/admin/restaurants - get a list of all restaurants
+- POST /rest/admin/restaurants - create a profile of the restaurant
+- PUT /rest/admin/restaurants/{restaurantId} - update restaurant profile by id
+- DELETE /rest/admin/restaurants/{restaurantId} - delete restaurant profile by id
 
-Функциональность пользователя:
-- GET /rest/restaurants - получить список всех ресторанов с меню на сегодня
-- GET /rest/restaurants/{restaurantId} - получить меню ресторана с id на сегодня
-- GET /rest/restaurants/{restaurantId}?date={date} - получить меню ресторана с id на указанную дату
-- GET /rest/restaurants?date={date} - получить меню всех ресторанов на указанную дату
+Functionality user:
+- GET /rest/restaurants - get a list of all restaurants with menu for today
+- GET /rest/restaurants/{restaurantId} - get a restaurant menu for today by id
+- GET /rest/restaurants/{restaurantId}?date={date} - get the restaurant menu by id on the specified date
+- GET /rest/restaurants?date={date} - get the menu of all restaurants on the specified date
 
-### Меню
-Функциональность администратора:
-- GET /rest/admin/restaurants/{restaurantId}/dishes - получить список всех бдюд ресторана по id ресторана
-- GET /rest/admin/restaurants/dishes/{dishId} - получить бдюдо по id
-- POST /rest/admin/restaurants/{restaurantId}dishes - создать бдюдо в меню ресторана
-- PUT /rest/admin/restaurants/{restaurantId}/dishes/{dishId} - обновить бдюдо в меню ресторана
-- DELETE /rest/admin/restaurants/dishes/{dishId} - удалить бдюдо по id
+### Menu
+Functionality administrator:
+- GET /rest/admin/restaurants/{restaurantId}/dishes - get a list of all restaurant dishes by restaurant id
+- GET /rest/admin/restaurants/{restaurantId}/dishes/{dishId} - get dish by id
+- POST /rest/admin/restaurants/{restaurantId}dishes - create a dish in the restaurant menu
+- PUT /rest/admin/restaurants/{restaurantId}/dishes/{dishId} - update a dish in the restaurant menu
+- DELETE /rest/admin/restaurants/{restaurantId}/dishes/{dishId} - delete dish by id
 
-### Голосование
-Функциональность администратора:
-- GET /rest/admin/users/votes - получить список всех голосов на сегодня
+### Vote
+Functionality administrator:
+- GET /rest/admin/users/votes - пget a list of all the votes for today
 
-Функциональность пользователя:
-- POST /rest/votes - голосовать за ресторан по id
-- PUT /rest/votes - переголосовать за ресторан по id
-- GET /rest/votes - получить свой голос за сегодня
-- GET /rest/votes/filter?startDate={startDate}&endDate={endDate} -  получить список своих голосов за указанный период
+Functionality user:
+- POST /rest/votes - vote for a restaurant by id
+- PUT /rest/votes - vote again for a restaurant by id
+- GET /rest/votes - get your vote for today
+- GET /rest/votes/filter?startDate={startDate}&endDate={endDate} -  get a list of your votes for the specified period
 
 ## Curl samples 
 ## Users with Admin role:
@@ -136,7 +136,7 @@ Each restaurant provides new menu each day.
 `curl -s http://localhost:8080/graduation/rest/admin/restaurants/100003/dishes --user admin@mail.ru:password`
 
 #### get Dish 100008
-`curl -s http://localhost:8080/graduation/rest/admin/restaurants/dishes/100008 --user admin@mail.ru:password`
+`curl -s http://localhost:8080/graduation/rest/admin/restaurants/100003/dishes/100008 --user admin@mail.ru:password`
 
 #### create Dish
 `curl -s -X POST -d '{"name":"New dish","price":100,"date":"2019-12-08"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/rest/admin/restaurants/100003/dishes --user admin@mail.ru:password`
@@ -145,7 +145,7 @@ Each restaurant provides new menu each day.
 `curl -s -X PUT -d '{"name":"Updated_DISH1","price":200,"date":"2019-12-08"}' -H 'Content-Type: application/json' http://localhost:8080/graduation/rest/admin/restaurants/100003/dishes/100005 --user admin@mail.ru:password`
 
 #### delete Dish 100008
-`curl -s -X DELETE http://localhost:8080/graduation/rest/admin/restaurants/dishes/100008 --user admin@mail.ru:password`
+`curl -s -X DELETE http://localhost:8080/graduation/rest/admin/restaurants/100003/dishes/100008 --user admin@mail.ru:password`
 
 ## Vote with Admin role:
 

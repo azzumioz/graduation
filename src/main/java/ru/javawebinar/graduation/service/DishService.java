@@ -36,12 +36,12 @@ public class DishService {
     }
 
     @CacheEvict(value = "restaurants", allEntries = true)
-    public void delete(int id) {
-        dishRepository.deleteById(id);
+    public void delete(int id, int restId) {
+        dishRepository.delete(id, restId );
     }
 
-    public Dish get(int id) {
-        return dishRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Dish not found by id " + id));
+    public Dish get(int id, int restId) {
+        return dishRepository.get(id, restId).orElseThrow(() -> new IllegalArgumentException("Dish not found by id " + id));
     }
 
     @Transactional

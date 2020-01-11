@@ -20,19 +20,15 @@ public interface DishRepository extends JpaRepository<Dish, Integer> {
     @Query("DELETE FROM Dish d WHERE d.id=:id AND d.restaurant.id=:restaurantId")
     int delete(@Param("id") int id, @Param("restaurantId") int restaurantId);
 
-    @Query("SELECT d FROM Dish d where d.restaurant.id=:restId ")
-    Optional<List<Dish>> getAll(@Param("restId")int restId);
+    @Query("SELECT d FROM Dish d WHERE d.restaurant.id=:restId ")
+    Optional<List<Dish>> getAll(@Param("restId") int restId);
+
+    @Query("SELECT d FROM Dish d WHERE d.id=:id AND d.restaurant.id=:restaurantId ")
+    Optional<Dish> get(@Param("id") int id, @Param("restaurantId") int restaurantId);
 
     @Override
     @Transactional
     Dish save(Dish entity);
-
-    @Override
-    @Transactional
-    void deleteById(Integer id);
-
-    @Override
-    Optional<Dish> findById(Integer id);
 
 }
 
