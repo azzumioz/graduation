@@ -87,7 +87,7 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
     void getTodayVote() throws Exception {
         mockMvc.perform(get(REST_URL)
                 .with(userHttpBasic(USER)))
-                //.andExpect(status().isOk())
+                .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(contentJson(VOTE5_TO));

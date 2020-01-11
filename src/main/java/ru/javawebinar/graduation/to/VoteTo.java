@@ -1,7 +1,5 @@
 package ru.javawebinar.graduation.to;
 
-import ru.javawebinar.graduation.model.Vote;
-
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -23,12 +21,6 @@ public class VoteTo extends BaseTo {
         super(id);
         this.date = date;
         this.restaurantId = restaurantId;
-    }
-
-    public VoteTo(Vote vote) {
-        super(vote.getId());
-        this.date = (vote.getDate());
-        this.restaurantId = vote.getRestaurant().getId();
     }
 
     public LocalDate getDate() {
