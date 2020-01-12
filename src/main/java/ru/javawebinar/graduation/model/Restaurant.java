@@ -4,14 +4,8 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@NamedEntityGraph(name = Restaurant.GRAPH_WITH_DISHES, attributeNodes =
-        {
-                @NamedAttributeNode("dishes")
-        })
 @Table(name = "restaurant")
 public class Restaurant extends AbstractNamedEntity {
-
-    public static final String GRAPH_WITH_DISHES = "Restaurant.withDishes";
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     private List<Dish> dishes;

@@ -57,7 +57,7 @@ Functionality administrator:
 
 ### Vote
 Functionality administrator:
-- GET /rest/admin/users/votes - пget a list of all the votes for today
+- GET /rest/admin/users/votes - get a list of all the votes for today
 
 Functionality user:
 - POST /rest/votes - vote for a restaurant by id
