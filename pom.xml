@@ -34,7 +34,7 @@
         <hibernate.version>5.4.1.Final</hibernate.version>
         <hibernate-validator.version>6.0.15.Final</hibernate-validator.version>
         <javax-el.version>3.0.1-b11</javax-el.version>
-        <jsoup.version>1.11.3</jsoup.version>
+        <jsoup.version>1.15.3</jsoup.version>
 
         <!-- Tools -->
         <ehcache.version>3.7.0</ehcache.version>
